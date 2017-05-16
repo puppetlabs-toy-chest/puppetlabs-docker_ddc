@@ -1,0 +1,40 @@
+{
+  "name": "puppetlabs-docker_ddc",
+  "version": "1.0.0",
+  "author": "Puppet Labs",
+  "summary": "Installs, configures, and manages the Docker Universal Control Plane and Docker trusted registry.",
+  "license": "Apache-2.0",
+  "source": "git://github.com/puppetlabs/puppetlabs-docker_ddc.git",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-docker_ddc",
+  "issues_url": "git://github.com/puppetlabs/puppetlabs-docker_ddc/issues",
+  "dependencies": [
+  
+  ],
+  "data_provider": null,
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "14.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.8.0 < 5.0.0"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 [![Puppet
-Forge](http://img.shields.io/puppetforge/v/puppetlabs/docker_ucp.svg)](https://forge.puppetlabs.com/puppetlabs/docker_ucp)
+Forge](http://img.shields.io/puppetforge/v/puppetlabs/docker_ddc.svg)](https://forge.puppetlabs.com/puppetlabs/docker_ddc)
 [![Build
-Status](https://travis-ci.org/puppetlabs/puppetlabs-docker_ucp.svg?branch=master)](https://travis-ci.org/puppetlabs/puppetlabs-docker_ucp)
+Status](https://travis-ci.org/puppetlabs/docker_ddc.svg?branch=master)](https://travis-ci.org/puppetlabs/docker_ddc)
 
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
@@ -182,5 +182,4 @@ systems too.
 This module is maintained by: 
 
 Gareth Rushgrove <gareth@puppet.com>
-
 Scott Coulton <scott.coulton@puppet.com>

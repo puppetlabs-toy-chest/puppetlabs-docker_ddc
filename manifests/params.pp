@@ -10,7 +10,7 @@ class docker_ddc::params {
   $dns_search_domains = []
   $tracking = true
   $usage = true
-  $version = undef
+  $version = '2.1.4'
   $docker_socket_path = '/var/run/docker.sock'
   $extra_parameters = undef
   $subject_alternative_names = []
@@ -31,8 +31,6 @@ class docker_ddc::params {
   $password = 'orca'
   $license_file = undef
   $local_client = false
-  $dtr = false
-  $dtr_external_url = undef
   $ucp_node = undef
   $ucp_username = undef
   $ucp_password = undef

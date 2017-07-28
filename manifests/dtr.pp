@@ -127,7 +127,7 @@ define docker_ddc::dtr (
     environment => 'HOME=/root',
     path        => ['/bin', '/usr/bin'],
     timeout     => 0,
-    onlyif      => $exec_join_onlyif,
+    unless      => $exec_join_onlyif,
     }
   }
 

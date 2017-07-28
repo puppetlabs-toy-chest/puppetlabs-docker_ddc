@@ -318,8 +318,9 @@ describe 'docker_ddc' do
 	    let(:params) do
               {
                 'ensure' => 'absent',
-                'ucp_id' => ucp_id,
-		'version' => '1'
+                'ucp_id' => '1',
+		'version' => '1',
+		'local_client' => true,
               }
             end
             it do
@@ -330,7 +331,7 @@ describe 'docker_ddc' do
                 .with_command(/uninstall/)
                 .with_command(/\-v #{default_socket_path}/)
                 .with_command(/\-\-id '#{ucp_id}'/)
-                .with_onlyif('docker inspect foo/ucp-proxy')
+                .with_onlyif('docker inspect ucp-proxy')
               should_not contain_exec('Uninstall Docker Universal Control Plane')
                 .with_command(/\-\-preserve\-images/)
               should_not contain_exec('Uninstall Docker Universal Control Plane')
@@ -338,45 +339,7 @@ describe 'docker_ddc' do
             end
           end
 	end
-
-          context 'with preserve images' do
-            let(:facts) {{:osfamily => 'RedHat', :operatingsystem => 'RedHat'}}
-            let(:params) do
-              {
-                'ensure' => 'absent',
-                'ucp_id' => ucp_id,
-                'preserve_images_on_delete' => true,
-              }
-            end
-            it { should contain_exec('Uninstall Docker Universal Control Plane').with_command(/\-\-preserve\-images/) }
-          end
-
-          context 'with preserve certs' do
-            let(:facts) {{:osfamily => 'RedHat', :operatingsystem => 'RedHat'}}
-	    let(:params) do
-              {
-                'ensure' => 'absent',
-                'ucp_id' => ucp_id,
-                'preserve_certs_on_delete' => true,
-              }
-            end
-            it { should contain_exec('Uninstall Docker Universal Control Plane').with_command(/\-\-preserve\-certs/) }
-          end
-
-          context 'without passing a UCP id' do
-            let(:facts) {{:osfamily => 'RedHat', :operatingsystem => 'RedHat'}}
-	    let(:params) do
-              {
-                'ensure' => 'absent',
-              }
-            end
-            it do
-              expect { # rubocop:disable Style/BlockDelimiters
-                should contain_exec('Uninstall Docker Universal Control Plane')
-              }.to raise_error(Puppet::Error, /When passing ensure => absent you must also provide the UCP id/)
-              end
-            end
-          end
-        end
       end
-   end
+    end
+  end
+end

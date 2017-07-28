@@ -11,6 +11,7 @@ group :test do
   gem 'rubocop', '0.40.0'
   gem 'simplecov'
   gem 'simplecov-console'
+  gem 'semantic_puppet'
 
   gem 'puppet-lint-absolute_classname-check'
   gem 'puppet-lint-leading_zero-check'

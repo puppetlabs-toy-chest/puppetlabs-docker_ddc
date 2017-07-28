@@ -92,44 +92,43 @@
 #   This is y useful in some testing and bootstrapping scenarios.
 #
 class docker_ddc::ucp (
-  $ensure = $docker_ddc::params::ensure,
-  $controller = $docker_ddc::params::controller,
-  $host_address = $docker_ddc::params::host_address,
-  $swarm_port = $docker_ddc::params::swarm_port,
-  $controller_port = $docker_ddc::params::controller_port,
-  $dns_servers = $docker_ddc::params::dns_servers,
-  $dns_options = $docker_ddc::params::dns_options,
-  $dns_search_domains = $docker_ddc::params::dns_search_domains,
-  $tracking = $docker_ddc::params::tracking,
-  $usage = $docker_ddc::params::usage,
-  $version = $docker_ddc::params::version,
-  $docker_socket_path = $docker_ddc::params::docker_socket_path,
-  $extra_parameters = $docker_ddc::params::extra_parameters,
-  $subject_alternative_names = $docker_ddc::params::subject_alternative_names,
-  $external_ca = $docker_ddc::params::external_ca,
-  $preserve_certs = $docker_ddc::params::preserve_certs,
-  $swarm_scheduler = $docker_ddc::params::swarm_scheduler,
-  $preserve_certs_on_delete = $docker_ddc::params::preserve_certs,
-  $preserve_images_on_delete = $docker_ddc::params::preserve_images_on_delete,
-  $ucp_url = $docker_ddc::params::ucp_url,
-  $ucp_manager = $docker_ddc::params::ucp_manager,
-  $ucp_id = $docker_ddc::params::ucp_id,
-  $fingerprint = $docker_ddc::params::fingerprint,
-  $token = $docker_ddc::params::token,
-  $listen_address = $docker_ddc::params::listen_address,
-  $advertise_address = $docker_ddc::params::advertise_address,
-  $replica = $docker_ddc::params::replica,
-  $username = $docker_ddc::params::username,
-  $password = $docker_ddc::params::password,
-  $license_file = $docker_ddc::params::license_file,
-  $local_client = $docker_ddc::params::local_client,
-  $dtr_external_url = $docker_ddc::params::dtr_external_url,
-  $ucp_node = $docker_ddc::params::ucp_node,
-  $ucp_username = $docker_ddc::params::ucp_username,
-  $ucp_password = $docker_ddc::params::ucp_password,
-  $ucp_insecure_tls = $docker_ddc::params::ucp_insecure_tls,
+  $ensure = $docker_ddc::ensure,
+  $controller = $docker_ddc::controller,
+  $host_address = $docker_ddc::host_address,
+  $swarm_port = $docker_ddc::swarm_port,
+  $controller_port = $docker_ddc::controller_port,
+  $dns_servers = $docker_ddc::dns_servers,
+  $dns_options = $docker_ddc::dns_options,
+  $dns_search_domains = $docker_ddc::dns_search_domains,
+  $tracking = $docker_ddc::tracking,
+  $usage = $docker_ddc::usage,
+  $version = $docker_ddc::version,
+  $docker_socket_path = $docker_ddc::docker_socket_path,
+  $extra_parameters = $docker_ddc::extra_parameters,
+  $subject_alternative_names = $docker_ddc::subject_alternative_names,
+  $external_ca = $docker_ddc::external_ca,
+  $preserve_certs = $docker_ddc::preserve_certs,
+  $swarm_scheduler = $docker_ddc::swarm_scheduler,
+  $preserve_certs_on_delete = $docker_ddc::preserve_certs,
+  $preserve_images_on_delete = $docker_ddc::preserve_images_on_delete,
+  $ucp_url = $docker_ddc::ucp_url,
+  $ucp_manager = $docker_ddc::ucp_manager,
+  $ucp_id = $docker_ddc::ucp_id,
+  $fingerprint = $docker_ddc::fingerprint,
+  $token = $docker_ddc::token,
+  $listen_address = $docker_ddc::listen_address,
+  $advertise_address = $docker_ddc::advertise_address,
+  $replica = $docker_ddc::replica,
+  $username = $docker_ddc::username,
+  $password = $docker_ddc::password,
+  $license_file = $docker_ddc::license_file,
+  $local_client = $docker_ddc::local_client,
+  $ucp_node = $docker_ddc::ucp_node,
+  $ucp_username = $docker_ddc::ucp_username,
+  $ucp_password = $docker_ddc::ucp_password,
+  $ucp_insecure_tls = $docker_ddc::ucp_insecure_tls,
 
-) inherits docker_ddc::params {
+){
 
   validate_re($::osfamily, '^(Debian|RedHat)$', "${::operatingsystem} not supported. This module only works on Debian and Red Hat based systems.") # lint:ignore:140chars
 
@@ -161,8 +160,10 @@ class docker_ddc::ucp (
       if !$ucp_url {
         fail('When joining UCP you must provide a URL.')
       }
-      if !$fingerprint {
-        fail('When joining UCP you must provide a fingerprint.')
+      if versioncmp($version, '1.1.3') <= 0 {
+        if !$fingerprint {
+          fail('When joining UCP v1 you must provide a fingerprint.')
+        }
       }
     }
   }

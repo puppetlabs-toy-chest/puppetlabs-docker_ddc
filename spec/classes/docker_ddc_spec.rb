@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'docker_ddc::ucp' do
+describe 'docker_ddc' do
   context 'supported operating systems' do
     let(:default_socket_path)  { '/var/run/docker.sock' }
     on_supported_os.each do |os, facts|
@@ -11,11 +11,11 @@ describe 'docker_ddc::ucp' do
 
         context 'setting up a controller' do
           context 'with the minimum properties' do
-            let(:params) { {'controller' => true } }
+	    let(:params) { {'controller' => true } }
             it { is_expected.to compile.with_all_deps }
             it do
-              should contain_class('Docker_ddc::ucp')
-                .with_ensure('present')
+              should contain_class('Docker_ddc')
+		.with_ensure('present')
                 .with_controller(true)
                 .with_tracking(true)
                 .with_usage(true)
@@ -101,7 +101,7 @@ describe 'docker_ddc::ucp' do
           end
 
           context 'with a swarm port' do
-            let(:params) do
+	    let(:params) do
               {
                 'controller' => true,
                 'swarm_port' => 1000,
@@ -111,7 +111,7 @@ describe 'docker_ddc::ucp' do
           end
 
           context 'with a controller port' do
-            let(:params) do
+	    let(:params) do
               {
                 'controller' => true,
                 'controller_port' => 1001,
@@ -121,7 +121,8 @@ describe 'docker_ddc::ucp' do
           end
 
           context 'with a license file' do
-            let(:license_file) { '/path/to/file.lic' }
+            let(:facts) {{:osfamily => 'RedHat', :operatingsystem => 'RedHat'}}
+	    let(:license_file) { '/path/to/file.lic' }
             let(:params) do
               {
                 'controller' => true,
@@ -153,7 +154,7 @@ describe 'docker_ddc::ucp' do
             'replica',
           ].each do |param|
             context "passing an invalid value for #{param}" do
-              let(:params) { { param => 'invalid' } }
+	      let(:params) { { param => 'invalid' } }
               it do
                 expect { # rubocop:disable Style/BlockDelimiters
                   should contain_exec('Install Docker Universal Control Plane')
@@ -225,17 +226,17 @@ describe 'docker_ddc::ucp' do
 
         context 'joining UCP v1' do
           context 'with the minimum properties v1' do
-            let(:fingerprint) { '12345' }
+	    let(:fingerprint) { '12345' }
             let(:ucp_url) { 'https://ucp' }
 	    let(:params) do
               {
-		'version' => '1.0',
+		'version' => '1',
 		'fingerprint' => fingerprint,
                 'ucp_url' => ucp_url,
               }
             end
 	    it do
-	      should contain_class('Docker_ddc::ucp').with_controller(false)
+	      should contain_class('Docker_ddc').with_controller(false)
               should contain_exec('Join Docker Universal Control Plane v1')
 		.with_logoutput(true)
                 .with_tries(3)
@@ -248,17 +249,18 @@ describe 'docker_ddc::ucp' do
                 .with_command(/\-\-disable\-usage/)
               should_not contain_exec('Install Docker Universal Control Plane')
                 .with_command(/\-\-disable\-tracking/)
-               end 
+               end
               end
 	    end
-	    
+          end
+
 	   context 'joining UCP v2' do
 	     context 'with the minimum properties v2' do
-               let(:token) { 'abc' }
+	       let(:token) { 'abc' }
                let(:listen_address) { '192.168.1.1' }
                let(:advertise_address) { '192.168.1.1' }
                let(:ucp_manager) { '192.168.1.100' }
-               let(:params) do  
+               let(:params) do
 	         {
 		   'version' => '2',
 		   'token' => token,
@@ -281,45 +283,43 @@ describe 'docker_ddc::ucp' do
 		   .with_command(/\-\-disable\-usage/)
 		 should_not contain_exec('Install Docker Universal Control Plane')
 		 should_not contain_exec('Join Docker Universal Control Plane v1')
+                 end
                end
-             end
-           
-	  
-	  context 'without passing a fingerprint' do
+	     end
+           end
+
+          context 'without passing a fingerprint' do
             let(:params) do
               {
                 'ucp_url' => 'https://ucp',
+		'version' => '2'
               }
             end
             it do
-              expect { # rubocop:disable Style/BlockDelimiters
-                should contain_exec('Join Docker Universal Control Plane v1')
-	      }.to raise_error(Puppet::Error, /When joining UCP you must provide a fingerprint/)
-            end
-         end
-         context 'without passing a UCP URL' do
-           let(:params) do
-              {
-                'fingerprint' => '12345',
-		'version'     => '1',
-              }
-            end
-            it do
-              expect { # rubocop:disable Style/BlockDelimiters
-                should contain_exec('Join Docker Universal Control Plane v1')
-		should_not contain_exec('Join Docker Universal Control Plane v2')
-              }.to raise_error(Puppet::Error, /When joining UCP you must provide a URL/)
+              contain_exec('Join Docker Universal Control Plane v2')
             end
           end
-        end
+
+	 context 'without passing a UCP URL' do
+	  let(:params) do
+              {
+                'fingerprint' => '12345',
+		'version'     => '2',
+              }
+            end
+            it do
+              contain_exec('Join Docker Universal Control Plane v2')
+            end
 
         context 'uninstalling UCP' do
           let(:ucp_id) { "1" }
           context 'with the minimum properties' do
-            let(:params) do
+            let(:facts) {{:osfamily => 'RedHat', :operatingsystem => 'RedHat' }}
+	    let(:params) do
               {
                 'ensure' => 'absent',
                 'ucp_id' => ucp_id,
+		'version' => '1'
               }
             end
             it do
@@ -337,8 +337,10 @@ describe 'docker_ddc::ucp' do
                 .with_command(/\-\-preserve\-certs/)
             end
           end
+	end
 
           context 'with preserve images' do
+            let(:facts) {{:osfamily => 'RedHat', :operatingsystem => 'RedHat'}}
             let(:params) do
               {
                 'ensure' => 'absent',
@@ -350,7 +352,8 @@ describe 'docker_ddc::ucp' do
           end
 
           context 'with preserve certs' do
-            let(:params) do
+            let(:facts) {{:osfamily => 'RedHat', :operatingsystem => 'RedHat'}}
+	    let(:params) do
               {
                 'ensure' => 'absent',
                 'ucp_id' => ucp_id,
@@ -361,7 +364,8 @@ describe 'docker_ddc::ucp' do
           end
 
           context 'without passing a UCP id' do
-            let(:params) do
+            let(:facts) {{:osfamily => 'RedHat', :operatingsystem => 'RedHat'}}
+	    let(:params) do
               {
                 'ensure' => 'absent',
               }
@@ -375,6 +379,4 @@ describe 'docker_ddc::ucp' do
           end
         end
       end
-    end
-  end
-end  
+   end

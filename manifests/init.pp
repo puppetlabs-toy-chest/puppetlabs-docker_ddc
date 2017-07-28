@@ -126,7 +126,6 @@ class docker_ddc (
   $password = $docker_ddc::params::password,
   $license_file = $docker_ddc::params::license_file,
   $local_client = $docker_ddc::params::local_client,
-  $dtr_external_url = $docker_ddc::params::dtr_external_url,
   $ucp_node = $docker_ddc::params::ucp_node,
   $ucp_username = $docker_ddc::params::ucp_username,
   $ucp_password = $docker_ddc::params::ucp_password,
@@ -142,7 +141,6 @@ class docker_ddc (
   validate_string($host_address, $version, $ucp_url, $ucp_id, $fingerprint, $username, $password) # lint:ignore:140chars
 
   include ::docker_ddc::ucp
-  include ::docker_ddc::dtr
   contain ::docker_ddc::ucp
-  contain ::docker_ddc::dtr
+
 }

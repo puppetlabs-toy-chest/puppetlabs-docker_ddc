@@ -133,7 +133,7 @@ docker_ddc::dtr {'Dtr install':
   ucp_password => 'orca4307',
   ucp_insecure_tls => true,
   dtr_ucp_url => 'https://172.17.10.101',
-  require => [ Class['docker_ucp'] 
+  require => Class['docker_ucp'] 
   }
 ```
 In this example we are setting the `install => true` this tells Puppet we want to configure a new registry. We set the `dtr_version`, this can be any version of the registry that is compatible with your UCP cluster. The `dtr_external_url` is the URL you will use to hit the registry, `ucp_node` is the node in the cluster that the registry will run on, user name and password are self explanatory. `ucp_insecure_tls => true` allows the use of self signed SSL certs, this should be set to false in a production environment. `dtr_ucp_url` is the URL that the registry will use to contact the UCP cluster.

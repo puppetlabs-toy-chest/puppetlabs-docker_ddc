@@ -175,13 +175,9 @@ class docker_ddc::ucp (
     try_sleep => 5,
   }
 
-  if $local_client {
-    $install_unless = 'docker inspect ucp-controller'
-    $join_unless = 'docker inspect ucp-proxy'
-  } else {
-    $install_unless = "docker inspect ${::hostname}/ucp-controller"
-    $join_unless = "docker inspect ${::hostname}/ucp-proxy"
-  }
+
+  $install_unless = 'docker inspect ucp-controller'
+  $join_unless = 'docker inspect ucp-proxy'
 
   if $ensure == 'absent' {
     $uninstall_flags = ucp_uninstall_flags({

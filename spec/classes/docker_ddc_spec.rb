@@ -278,7 +278,7 @@ describe 'docker_ddc' do
        .with_command(/\-\-token '#{token}'/)
        .with_command(/\-\-listen_addr '#{listen_address}'/)
        .with_command(/\-\-advertise_addr '#{advertise_address}'/)
-       .with_unless('docker inspect foo/ucp-proxy')
+       .with_unless('docker inspect ucp-proxy')
      should_not contain_exec('Install Docker Universal Control Plane')
        .with_command(/\-\-disable\-usage/)
      should_not contain_exec('Install Docker Universal Control Plane')

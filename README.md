@@ -172,15 +172,12 @@ docker_ddc::dtr {'Dtr install':
   
 ## Limitations
 
-As of Docker UCP 0.8, UCP only supports RHEL 7.0, 7.1, 7.2, Ubuntu 14.04, 16.04
-and CentOS 7.1, therefore the module only works on those operating
-systems too.
+This module only supports UCP version 2.0 and above.
+UCP only supports RHEL 7.0, 7.1, 7.2, Ubuntu 14.04, 16.04 and CentOS 7.1
 
 
 ## Maintainers
 
 This module is maintained by: 
 
-Gareth Rushgrove <gareth@puppet.com>
-
-Scott Coulton <scott.coulton@puppet.com>
+The cloud and containers team.

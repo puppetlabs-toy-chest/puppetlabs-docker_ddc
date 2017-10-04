@@ -172,7 +172,7 @@ docker_ddc::dtr {'Dtr install':
   
 ## Limitations
 
-This module only supports UCP version 2.0 and above.
+This module only supports UCP version 1.9 and above.
 UCP only supports RHEL 7.0, 7.1, 7.2, Ubuntu 14.04, 16.04 and CentOS 7.1
 
 

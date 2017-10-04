@@ -10,7 +10,7 @@ class docker_ddc::params {
   $dns_search_domains = []
   $tracking = true
   $usage = true
-  $version = '2.1.4'
+  $version = '2.2.3'
   $docker_socket_path = '/var/run/docker.sock'
   $extra_parameters = undef
   $subject_alternative_names = []

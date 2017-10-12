@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-docker_ddc",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Puppet Labs",
   "summary": "Installs, configures, and manages the Docker Universal Control Plane and Docker trusted registry.",
   "license": "Apache-2.0",
@@ -34,7 +34,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.2.1 < 5.0.0"
+      "version_requirement": ">= 4.2.1 < 6.0.0"
     }
   ]
 }

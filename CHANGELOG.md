@@ -9,3 +9,7 @@ The module has moved now to docker_ddc and has DTR functionality.
 ##2017-08-29 - Version 1.0.1
 
 The 1.0.1 Release contains support for Cisco CVD.
+
+##2017-10-12 - Version 1.0.2
+
+This release includes support for Puppet 5 and documentation updates.

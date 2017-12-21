@@ -173,6 +173,7 @@ class docker_ddc::ucp (
     logoutput => true,
     tries     => 3,
     try_sleep => 5,
+    timeout => 600,
   }
 
 
@@ -198,7 +199,6 @@ class docker_ddc::ucp (
         host_address       => $host_address,
         tracking           => $tracking,
         usage              => $usage,
-        version            => $version,
         swarm_port         => $swarm_port,
         controller_port    => $controller_port,
         preserve_certs     => $preserve_certs,
@@ -212,12 +212,12 @@ class docker_ddc::ucp (
       })
       if $license_file {
         exec { 'Install Docker Universal Control Plane':
-          command => "docker run --rm -v ${docker_socket_path}:/var/run/docker.sock -v ${license_file}:/docker_subscription.lic --name ucp docker/ucp install ${install_flags}", # lint:ignore:140chars
+          command => "docker run --rm -v ${docker_socket_path}:/var/run/docker.sock -v ${license_file}:/docker_subscription.lic --name ucp docker/ucp:${version} install ${install_flags}", # lint:ignore:140chars
           unless  => $install_unless,
         }
       } else {
         exec { 'Install Docker Universal Control Plane':
-          command => "docker run --rm -v ${docker_socket_path}:/var/run/docker.sock --name ucp docker/ucp install ${install_flags}",
+          command => "docker run --rm -v ${docker_socket_path}:/var/run/docker.sock --name ucp docker/ucp$:{version} install ${install_flags}",
           unless  => $install_unless,
         }
       }
@@ -226,7 +226,6 @@ class docker_ddc::ucp (
         host_address       => $host_address,
         tracking           => $tracking,
         usage              => $usage,
-        version            => $version,
         fingerprint        => $fingerprint,
         ucp_url            => $ucp_url,
         replica            => $replica,

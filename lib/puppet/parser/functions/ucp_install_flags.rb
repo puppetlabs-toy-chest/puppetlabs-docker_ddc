@@ -2,14 +2,14 @@ module Puppet::Parser::Functions
   newfunction(:ucp_install_flags, :type => :rvalue) do |args|
     opts = args[0] || {}
     flags = []
-    
+
     if opts['admin_username'].to_s != 'undef'
       flags << "--admin-username '#{opts['admin_username']}'"
-    end      
-    
+    end
+
     if opts['admin_password'].to_s != 'undef'
       flags << "--admin-password '#{opts['admin_password']}'"
-    end      
+    end
 
     if opts['host_address'] && opts['host_address'].to_s != 'undef'
       flags << "--host-address '#{opts['host_address']}'"
@@ -21,10 +21,6 @@ module Puppet::Parser::Functions
 
     unless opts['usage']
       flags << '--disable-usage'
-    end
-
-    if opts['version'] && opts['version'].to_s != 'undef'
-      flags << "--image-version '#{opts['version']}'"
     end
 
     if opts['swarm_port'] && opts['swarm_port'].to_s != 'undef'

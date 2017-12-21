@@ -217,7 +217,7 @@ class docker_ddc::ucp (
         }
       } else {
         exec { 'Install Docker Universal Control Plane':
-          command => "docker run --rm -v ${docker_socket_path}:/var/run/docker.sock --name ucp docker/ucp$:{version} install ${install_flags}",
+          command => "docker run --rm -v ${docker_socket_path}:/var/run/docker.sock --name ucp docker/ucp:${version} install ${install_flags}",
           unless  => $install_unless,
         }
       }

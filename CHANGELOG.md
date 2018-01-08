@@ -13,3 +13,7 @@ The 1.0.1 Release contains support for Cisco CVD.
 ##2017-10-12 - Version 1.0.2
 
 This release includes support for Puppet 5 and documentation updates.
+
+##2018-01-09 - Version 1.0.3
+
+Minor updates in install command.

@@ -8,7 +8,9 @@
   "project_page": "https://github.com/puppetlabs/puppetlabs-docker_ddc",
   "issues_url": "git://github.com/puppetlabs/puppetlabs-docker_ddc/issues",
   "dependencies": [
-  
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.24.0"},
+    {"name":"puppetlabs/docker","version_requirement":">= 1.0.4"},
+    {"name":"puppetlabs/translate","version_requirement":">= 0.0.1 < 1.1.0"}  
   ],
   "data_provider": null,
   "operatingsystem_support": [

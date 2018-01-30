@@ -153,16 +153,16 @@ class docker_ddc::ucp (
 
   if ($ensure == 'absent') {
     if !$ucp_id {
-      fail('When passing ensure => absent you must also provide the UCP id.')
+      fail translate(('When passing ensure => absent you must also provide the UCP id.'))
     }
   } else {
     if !$controller {
       if !$ucp_url {
-        fail('When joining UCP you must provide a URL.')
+        fail translate(('When joining UCP you must provide a URL.'))
       }
       if versioncmp($version, '1.1.3') <= 0 {
         if !$fingerprint {
-          fail('When joining UCP v1 you must provide a fingerprint.')
+          fail translate(('When joining UCP v1 you must provide a fingerprint.'))
         }
       }
     }

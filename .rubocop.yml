@@ -1,4 +1,10 @@
+---
+require:
+ - rubocop-rspec
+ - rubocop-i18n
 AllCops:
+  Include:
+  - "./**/*.rb"
   Exclude:
     # Ignore HTML related things
     - '**/*.erb'
@@ -6,6 +12,12 @@ AllCops:
     - 'vendor/**/*'
     # Ignore code from test fixtures
     - 'spec/fixtures/**/*'
+
+RSpec/BeforeAfterAll:
+  Description: Beware of using after(:all) as it may cause state to leak between tests.
+    A necessary evil in acceptance testing.
+  Exclude:
+  - spec/acceptance/**/*.rb
 
 Lint/ConditionPosition:
   Enabled: true
@@ -24,6 +36,8 @@ Lint/EnsureReturn:
 
 Lint/HandleExceptions:
   Enabled: true
+  Exclude:
+  - spec/spec_helper_acceptance.rb
 
 Lint/LiteralInCondition:
   Enabled: true
@@ -43,7 +57,7 @@ Lint/AmbiguousOperator:
 Lint/AssignmentInCondition:
   Enabled: true
 
-Style/SpaceBeforeComment:
+Layout/SpaceBeforeComment:
   Enabled: true
 
 # DISABLED - not useful
@@ -72,7 +86,7 @@ Lint/AmbiguousRegexpLiteral:
   Enabled: false
 
 # DISABLED
-Lint/Eval:
+Security/Eval:
   Enabled: false
 
 # DISABLED
@@ -120,22 +134,22 @@ Lint/UselessAssignment:
 Lint/Void:
   Enabled: true
 
-Style/AccessModifierIndentation:
+Layout/AccessModifierIndentation:
   Enabled: false
 
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
 
 Style/Alias:
   Enabled: false
 
-Style/AlignArray:
+Layout/AlignArray:
   Enabled: false
 
-Style/AlignHash:
+Layout/AlignHash:
   Enabled: false
 
-Style/AlignParameters:
+Layout/AlignParameters:
   Enabled: false
 
 Metrics/BlockNesting:
@@ -153,13 +167,13 @@ Style/BracesAroundHashParameters:
 Style/CaseEquality:
   Enabled: false
 
-Style/CaseIndentation:
+Layout/CaseIndentation:
   Enabled: false
 
 Style/CharacterLiteral:
   Enabled: false
 
-Style/ClassAndModuleCamelCase:
+Naming/ClassAndModuleCamelCase:
   Enabled: false
 
 Style/ClassAndModuleChildren:
@@ -169,6 +183,9 @@ Style/ClassCheck:
   Enabled: false
 
 Metrics/ClassLength:
+  Enabled: false
+
+Metrics/BlockLength:
   Enabled: false
 
 Style/ClassMethods:
@@ -187,67 +204,67 @@ Style/WordArray:
 Style/UnneededPercentQ:
   Enabled: false
 
-Style/Tab:
+Layout/Tab:
   Enabled: false
 
-Style/SpaceBeforeSemicolon:
+Layout/SpaceBeforeSemicolon:
   Enabled: false
 
-Style/TrailingBlankLines:
+Layout/TrailingBlankLines:
   Enabled: false
 
-Style/SpaceInsideBlockBraces:
+Layout/SpaceInsideBlockBraces:
   Enabled: false
 
 Style/SpaceInsideBrackets:
   Enabled: false
 
-Style/SpaceInsideHashLiteralBraces:
+Layout/SpaceInsideHashLiteralBraces:
   Enabled: false
 
-Style/SpaceInsideParens:
+Layout/SpaceInsideParens:
   Enabled: false
 
-Style/LeadingCommentSpace:
+Layout/LeadingCommentSpace:
   Enabled: false
 
-Style/SpaceBeforeFirstArg:
+Layout/SpaceBeforeFirstArg:
   Enabled: false
 
-Style/SpaceAfterColon:
+Layout/SpaceAfterColon:
   Enabled: false
 
-Style/SpaceAfterComma:
+Layout/SpaceAfterComma:
   Enabled: false
 
-Style/SpaceAroundKeyword:
+Layout/SpaceAroundKeyword:
   Enabled: false
 
-Style/SpaceAfterMethodName:
+Layout/SpaceAfterMethodName:
   Enabled: false
 
-Style/SpaceAfterNot:
+Layout/SpaceAfterNot:
   Enabled: false
 
-Style/SpaceAfterSemicolon:
+Layout/SpaceAfterSemicolon:
   Enabled: false
 
-Style/SpaceAroundEqualsInParameterDefault:
+Layout/SpaceAroundEqualsInParameterDefault:
   Enabled: false
 
-Style/SpaceAroundOperators:
+Layout/SpaceAroundOperators:
   Enabled: false
 
-Style/SpaceBeforeBlockBraces:
+Layout/SpaceBeforeBlockBraces:
   Enabled: false
 
-Style/SpaceBeforeComma:
+Layout/SpaceBeforeComma:
   Enabled: false
 
 Style/CollectionMethods:
   Enabled: false
 
-Style/CommentIndentation:
+Layout/CommentIndentation:
   Enabled: false
 
 Style/ColonMethodCall:
@@ -259,7 +276,7 @@ Style/CommentAnnotation:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
-Style/ConstantName:
+Naming/ConstantName:
   Enabled: false
 
 Style/Documentation:
@@ -268,10 +285,10 @@ Style/Documentation:
 Style/DefWithParentheses:
   Enabled: false
 
-Style/DeprecatedHashMethods:
+Style/PreferredHashMethods:
   Enabled: false
 
-Style/DotPosition:
+Layout/DotPosition:
   Enabled: false
 
 # DISABLED - used for converting to bool
@@ -281,25 +298,25 @@ Style/DoubleNegation:
 Style/EachWithObject:
   Enabled: false
 
-Style/EmptyLineBetweenDefs:
+Layout/EmptyLineBetweenDefs:
   Enabled: false
 
-Style/IndentArray:
+Layout/IndentArray:
   Enabled: false
 
-Style/IndentHash:
+Layout/IndentHash:
   Enabled: false
 
-Style/IndentationConsistency:
+Layout/IndentationConsistency:
   Enabled: false
 
-Style/IndentationWidth:
+Layout/IndentationWidth:
   Enabled: false
 
-Style/EmptyLines:
+Layout/EmptyLines:
   Enabled: false
 
-Style/EmptyLinesAroundAccessModifier:
+Layout/EmptyLinesAroundAccessModifier:
   Enabled: false
 
 Style/EmptyLiteral:
@@ -308,7 +325,7 @@ Style/EmptyLiteral:
 Metrics/LineLength:
   Enabled: false
 
-Style/MethodCallParentheses:
+Style/MethodCallWithoutArgsParentheses:
   Enabled: false
 
 Style/MethodDefParentheses:
@@ -317,7 +334,7 @@ Style/MethodDefParentheses:
 Style/LineEndConcatenation:
   Enabled: false
 
-Style/TrailingWhitespace:
+Layout/TrailingWhitespace:
   Enabled: false
 
 Style/StringLiterals:
@@ -362,7 +379,7 @@ Style/UnlessElse:
 Style/VariableInterpolation:
   Enabled: false
 
-Style/VariableName:
+Naming/VariableName:
   Enabled: false
 
 Style/WhileUntilDo:
@@ -371,7 +388,7 @@ Style/WhileUntilDo:
 Style/EvenOdd:
   Enabled: false
 
-Style/FileName:
+Naming/FileName:
   Enabled: false
 
 Style/For:
@@ -380,7 +397,7 @@ Style/For:
 Style/Lambda:
   Enabled: false
 
-Style/MethodName:
+Naming/MethodName:
   Enabled: false
 
 Style/MultilineTernaryOperator:
@@ -395,6 +412,13 @@ Style/NilComparison:
 Style/FormatString:
   Enabled: false
 
+Style/FormatStringToken:
+  Description: Following the main puppet project's style, prefer the simpler template
+    tokens over annotated ones.
+  EnforcedStyle: template
+  Exclude:
+    - lib/puppet/parser/functions/ucp_install_flags.rb
+    - lib/puppet/parser/functions/ucp_join_flags.rb 
 Style/MultilineBlockChain:
   Enabled: false
 
@@ -416,7 +440,7 @@ Style/NumericLiterals:
 Style/OneLineConditional:
   Enabled: false
 
-Style/OpMethod:
+Naming/BinaryOperatorParameterName:
   Enabled: false
 
 Style/ParenthesesAroundCondition:
@@ -428,7 +452,7 @@ Style/PercentLiteralDelimiters:
 Style/PerlBackrefs:
   Enabled: false
 
-Style/PredicateName:
+Naming/PredicateName:
   Enabled: false
 
 Style/RedundantException:
@@ -461,7 +485,7 @@ Metrics/ParameterLists:
 Lint/RequireParentheses:
   Enabled: false
 
-Style/SpaceBeforeFirstArg:
+Layout/SpaceBeforeFirstArg:
   Enabled: false
 
 Style/ModuleFunction:
@@ -479,12 +503,30 @@ Style/Encoding:
 Style/TrailingCommaInLiteral:
   Enabled: false
 
-Style/MultilineMethodCallIndentation:
+Layout/MultilineMethodCallIndentation:
   Enabled: false  
 
 Lint/Void:
   Enabled: false
 
 # Disabled for rspec  
-Style/MultilineBlockLayout:
-  Enabled: false    
+Layout/MultilineBlockLayout:
+  Enabled: false
+
+GetText/DecorateString:
+  Enabled: true
+  Exclude:
+  - lib/puppet/parser/functions/dtr_install_flags.rb
+  - lib/puppet/parser/functions/dtr_join_flags.rb
+  - lib/puppet/parser/functions/ucp_install_flags.rb
+  - lib/puppet/parser/functions/ucp_join_flags.rb
+  - lib/puppet/parser/functions/ucp_uninstall_flags.rb   
+
+GetText/DecorateFunctionMessage:
+  Enabled: true
+
+GetText/DecorateStringFormattingUsingInterpolation:
+  Enabled: true 
+
+GetText/DecorateStringFormattingUsingPercent:
+  Enabled: true     

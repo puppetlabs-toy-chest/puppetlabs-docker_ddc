@@ -34,7 +34,7 @@ RSpec.configure do |c|
       end
       on(host, 'yum update -y -q') if fact_on(host, 'osfamily') == 'RedHat'
 
-      on host, puppet('module', 'install', 'puppetlabs-docker', '--version', '1.0.4'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module', 'install', 'puppetlabs-docker', '--version', '1.0.5'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module', 'install', 'puppetlabs-translate', '--version', '1.0.0' ), { :acceptable_exit_codes => [0,1] }
 
       # net-tools required for netstat utility being used by some tests

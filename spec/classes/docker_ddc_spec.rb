@@ -158,7 +158,7 @@ describe 'docker_ddc' do
               it do
                 expect { # rubocop:disable Style/BlockDelimiters
                   should contain_exec('Install Docker Universal Control Plane')
-                }.to raise_error(Puppet::Error, /is not a boolean/)
+                }.to raise_error(Puppet::Error, /expects a Boolean value/)
               end
             end
           end
@@ -172,7 +172,7 @@ describe 'docker_ddc' do
               it do
                 expect { # rubocop:disable Style/BlockDelimiters
                   should contain_exec('Install Docker Universal Control Plane')
-                }.to raise_error(Puppet::Error, /is not an absolute path/)
+                }.to raise_error(Puppet::Error, /got 'invalid'/)
               end
             end
           end
@@ -186,7 +186,7 @@ describe 'docker_ddc' do
               it do
                 expect { # rubocop:disable Style/BlockDelimiters
                   should contain_exec('Install Docker Universal Control Plane')
-                }.to raise_error(Puppet::Error, /does not match/)
+                }.to raise_error(Puppet::Error, /got 'invalid'/)
               end
             end
           end
@@ -218,7 +218,7 @@ describe 'docker_ddc' do
               it do
                 expect { # rubocop:disable Style/BlockDelimiters
                   should contain_exec('Install Docker Universal Control Plane')
-                }.to raise_error(Puppet::Error, /Expected first argument to be an Integer/)
+                }.to raise_error(Puppet::Error, /Integer, got String/)
               end
             end
           end

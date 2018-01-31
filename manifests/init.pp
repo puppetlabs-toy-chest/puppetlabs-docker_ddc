@@ -95,50 +95,49 @@
 #   This is y useful in some testing and bootstrapping scenarios.
 #
 class docker_ddc (
-  $ensure = $docker_ddc::params::ensure,
-  $controller = $docker_ddc::params::controller,
-  $host_address = $docker_ddc::params::host_address,
-  $swarm_port = $docker_ddc::params::swarm_port,
-  $controller_port = $docker_ddc::params::controller_port,
-  $dns_servers = $docker_ddc::params::dns_servers,
-  $dns_options = $docker_ddc::params::dns_options,
-  $dns_search_domains = $docker_ddc::params::dns_search_domains,
-  $tracking = $docker_ddc::params::tracking,
-  $usage = $docker_ddc::params::usage,
-  $version = $docker_ddc::params::version,
-  $docker_socket_path = $docker_ddc::params::docker_socket_path,
-  $extra_parameters = $docker_ddc::params::extra_parameters,
-  $subject_alternative_names = $docker_ddc::params::subject_alternative_names,
-  $external_ca = $docker_ddc::params::external_ca,
-  $preserve_certs = $docker_ddc::params::preserve_certs,
-  $swarm_scheduler = $docker_ddc::params::swarm_scheduler,
-  $preserve_certs_on_delete = $docker_ddc::params::preserve_certs,
-  $preserve_images_on_delete = $docker_ddc::params::preserve_images_on_delete,
-  $ucp_url = $docker_ddc::params::ucp_url,
-  $ucp_manager = $docker_ddc::params::ucp_manager,
-  $ucp_id = $docker_ddc::params::ucp_id,
-  $fingerprint = $docker_ddc::params::fingerprint,
-  $token = $docker_ddc::params::token,
-  $listen_address = $docker_ddc::params::listen_address,
-  $advertise_address = $docker_ddc::params::advertise_address,
-  $replica = $docker_ddc::params::replica,
-  $username = $docker_ddc::params::username,
-  $password = $docker_ddc::params::password,
-  $license_file = $docker_ddc::params::license_file,
-  $local_client = $docker_ddc::params::local_client,
-  $ucp_node = $docker_ddc::params::ucp_node,
-  $ucp_username = $docker_ddc::params::ucp_username,
-  $ucp_password = $docker_ddc::params::ucp_password,
-  $ucp_insecure_tls = $docker_ddc::params::ucp_insecure_tls,
+  Optional[Pattern[/^present$|^absent$/]] $ensure                   = $docker_ddc::params::ensure,
+  Boolean $controller                                               = $docker_ddc::params::controller,
+  Optional[String] $host_address                                    = $docker_ddc::params::host_address,
+  Optional[Integer] $swarm_port                                     = $docker_ddc::params::swarm_port,
+  Optional[Integer] $controller_port                                = $docker_ddc::params::controller_port,
+  Variant[String,Array,Undef]$dns_servers                           = $docker_ddc::params::dns_servers,
+  Variant[String,Array,Undef]$dns_options                           = $docker_ddc::params::dns_options,
+  Variant[String,Array,Undef]$dns_search_domains                    = $docker_ddc::params::dns_search_domains,
+  Boolean $tracking                                                 = $docker_ddc::params::tracking,
+  Boolean $usage                                                    = $docker_ddc::params::usage,
+  String $version                                                   = $docker_ddc::params::version,
+  Optional[Pattern[/^\/([^\/\0]+\/*)*$/]] $docker_socket_path       = $docker_ddc::params::docker_socket_path,
+  Optional[String] $extra_parameters                                = $docker_ddc::params::extra_parameters,
+  Variant[String,Array,Undef]$subject_alternative_names             = $docker_ddc::params::subject_alternative_names,
+  Boolean $external_ca                                              = $docker_ddc::params::external_ca,
+  Boolean $preserve_certs                                           = $docker_ddc::params::preserve_certs,
+  Optional[Pattern[/^spread$|^binpack$|^random$/]] $swarm_scheduler = $docker_ddc::params::swarm_scheduler,
+  Boolean $preserve_certs_on_delete                                 = $docker_ddc::params::preserve_certs,
+  Boolean $preserve_images_on_delete                                = $docker_ddc::params::preserve_images_on_delete,
+  Optional[String] $ucp_url                                         = $docker_ddc::params::ucp_url,
+  Optional[String] $ucp_manager                                     = $docker_ddc::params::ucp_manager,
+  Optional[String] $ucp_id                                          = $docker_ddc::params::ucp_id,
+  Optional[String] $fingerprint                                     = $docker_ddc::params::fingerprint,
+  Optional[String] $token                                           = $docker_ddc::params::token,
+  Optional[String] $listen_address                                  = $docker_ddc::params::listen_address,
+  Optional[String] $advertise_address                               = $docker_ddc::params::advertise_address,
+  Boolean $replica                                                  = $docker_ddc::params::replica,
+  String $username                                                  = $docker_ddc::params::username,
+  String $password                                                  = $docker_ddc::params::password,
+  Optional[Pattern[/^\/([^\/\0]+\/*)*$/]] $license_file             = $docker_ddc::params::license_file,
+  Boolean $local_client                                             = $docker_ddc::params::local_client,
+  Optional[String] $ucp_node                                        = $docker_ddc::params::ucp_node,
+  Optional[String] $ucp_username                                    = $docker_ddc::params::ucp_username,
+  Optional[String] $ucp_password                                    = $docker_ddc::params::ucp_password,
+  Optional[Boolean] $ucp_insecure_tls                               = $docker_ddc::params::ucp_insecure_tls,
 
 ) inherits docker_ddc::params {
 
-  validate_re($::osfamily, '^(Debian|RedHat)$', "${::operatingsystem} not supported. This module only works on Debian and Red Hat based systems.") # lint:ignore:140chars
-
-  validate_re($ensure, '^(present|absent)$')
-  validate_bool($tracking, $usage, $preserve_certs, $preserve_certs_on_delete, $preserve_images_on_delete, $controller, $external_ca, $replica) # lint:ignore:140chars
-  validate_absolute_path($docker_socket_path)
-  validate_string($host_address, $version, $ucp_url, $ucp_id, $fingerprint, $username, $password) # lint:ignore:140chars
+  if $::osfamily {
+    assert_type(Pattern[/^(Debian|RedHat)$/], $::osfamily) |$a, $b| {
+      fail(translate('This module only works on Debian or Red Hat based systems.'))
+    }
+  }
 
   include ::docker_ddc::ucp
   contain ::docker_ddc::ucp

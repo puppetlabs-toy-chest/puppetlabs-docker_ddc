@@ -92,63 +92,48 @@
 #   This is y useful in some testing and bootstrapping scenarios.
 #
 class docker_ddc::ucp (
-  $ensure = $docker_ddc::ensure,
-  $controller = $docker_ddc::controller,
-  $host_address = $docker_ddc::host_address,
-  $swarm_port = $docker_ddc::swarm_port,
-  $controller_port = $docker_ddc::controller_port,
-  $dns_servers = $docker_ddc::dns_servers,
-  $dns_options = $docker_ddc::dns_options,
-  $dns_search_domains = $docker_ddc::dns_search_domains,
-  $tracking = $docker_ddc::tracking,
-  $usage = $docker_ddc::usage,
-  $version = $docker_ddc::version,
-  $docker_socket_path = $docker_ddc::docker_socket_path,
-  $extra_parameters = $docker_ddc::extra_parameters,
-  $subject_alternative_names = $docker_ddc::subject_alternative_names,
-  $external_ca = $docker_ddc::external_ca,
-  $preserve_certs = $docker_ddc::preserve_certs,
-  $swarm_scheduler = $docker_ddc::swarm_scheduler,
-  $preserve_certs_on_delete = $docker_ddc::preserve_certs,
-  $preserve_images_on_delete = $docker_ddc::preserve_images_on_delete,
-  $ucp_url = $docker_ddc::ucp_url,
-  $ucp_manager = $docker_ddc::ucp_manager,
-  $ucp_id = $docker_ddc::ucp_id,
-  $fingerprint = $docker_ddc::fingerprint,
-  $token = $docker_ddc::token,
-  $listen_address = $docker_ddc::listen_address,
-  $advertise_address = $docker_ddc::advertise_address,
-  $replica = $docker_ddc::replica,
-  $username = $docker_ddc::username,
-  $password = $docker_ddc::password,
-  $license_file = $docker_ddc::license_file,
-  $local_client = $docker_ddc::local_client,
-  $ucp_node = $docker_ddc::ucp_node,
-  $ucp_username = $docker_ddc::ucp_username,
-  $ucp_password = $docker_ddc::ucp_password,
-  $ucp_insecure_tls = $docker_ddc::ucp_insecure_tls,
+  Optional[Pattern[/^present$|^absent$/]] $ensure                   = $docker_ddc::ensure,
+  Boolean $controller                                               = $docker_ddc::controller,
+  Optional[String] $host_address                                    = $docker_ddc::host_address,
+  Optional[Integer] $swarm_port                                     = $docker_ddc::swarm_port,
+  Optional[Integer] $controller_port                                = $docker_ddc::controller_port,
+  Variant[String,Array,Undef] $dns_servers                          = $docker_ddc::dns_servers,
+  Variant[String,Array,Undef] $dns_options                          = $docker_ddc::dns_options,
+  Variant[String,Array,Undef] $dns_search_domains                   = $docker_ddc::dns_search_domains,
+  Boolean $tracking                                                 = $docker_ddc::tracking,
+  Boolean $usage                                                    = $docker_ddc::usage,
+  String $version                                                   = $docker_ddc::version,
+  Optional[Pattern[/^\/([^\/\0]+\/*)*$/]] $docker_socket_path       = $docker_ddc::docker_socket_path,
+  Optional[String] $extra_parameters                                = $docker_ddc::extra_parameters,
+  Variant[String,Array,Undef] $subject_alternative_names            = $docker_ddc::subject_alternative_names,
+  Boolean $external_ca                                              = $docker_ddc::external_ca,
+  Boolean $preserve_certs                                           = $docker_ddc::preserve_certs,
+  Optional[Pattern[/^spread$|^binpack$|^random$/]] $swarm_scheduler = $docker_ddc::swarm_scheduler,
+  Boolean $preserve_certs_on_delete                                 = $docker_ddc::preserve_certs,
+  Boolean $preserve_images_on_delete                                = $docker_ddc::preserve_images_on_delete,
+  Optional[String] $ucp_url                                         = $docker_ddc::ucp_url,
+  Optional[String] $ucp_manager                                     = $docker_ddc::ucp_manager,
+  Optional[String] $ucp_id                                          = $docker_ddc::ucp_id,
+  Optional[String] $fingerprint                                     = $docker_ddc::fingerprint,
+  Optional[String] $token                                           = $docker_ddc::token,
+  Optional[String] $listen_address                                  = $docker_ddc::listen_address,
+  Optional[String] $advertise_address                               = $docker_ddc::advertise_address,
+  Boolean $replica                                                  = $docker_ddc::replica,
+  String $username                                                  = $docker_ddc::username,
+  String $password                                                  = $docker_ddc::password,
+  Optional[Pattern[/^\/([^\/\0]+\/*)*$/]] $license_file             = $docker_ddc::license_file,
+  Boolean $local_client                                             = $docker_ddc::local_client,
+  Optional[String] $ucp_node                                        = $docker_ddc::ucp_node,
+  Optional[String] $ucp_username                                    = $docker_ddc::ucp_username,
+  Optional[String] $ucp_password                                    = $docker_ddc::ucp_password,
+  Boolean $ucp_insecure_tls                                         = $docker_ddc::ucp_insecure_tls,
 
 ){
 
-  validate_re($::osfamily, '^(Debian|RedHat)$', "${::operatingsystem} not supported. This module only works on Debian and Red Hat based systems.") # lint:ignore:140chars
-
-  validate_re($ensure, '^(present|absent)$')
-  validate_bool($tracking, $usage, $preserve_certs, $preserve_certs_on_delete, $preserve_images_on_delete, $controller, $external_ca, $replica) # lint:ignore:140chars
-  validate_absolute_path($docker_socket_path)
-  validate_string($host_address, $version, $ucp_url, $ucp_id, $fingerprint, $username, $password) # lint:ignore:140chars
-
-  if $swarm_port {
-    validate_integer($swarm_port)
-  }
-  if $controller_port {
-    validate_integer($controller_port)
-  }
-  if $swarm_scheduler {
-    validate_re($swarm_scheduler, '^(spread|binpack|random)$')
-  }
-
-  if $license_file {
-    validate_absolute_path($license_file)
+  if $::osfamily {
+    assert_type(Pattern[/^(Debian|RedHat)$/], $::osfamily) |$a, $b| {
+      fail translate(('This module only works on Debian or Red Hat based systems.'))
+    }
   }
 
   if ($ensure == 'absent') {

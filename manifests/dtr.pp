@@ -1,6 +1,6 @@
 # == Define: docker_ddc::dtr
 #
-#  A define type that managers Docker's trusted registry 
+#  A define type that managers Docker's trusted registry
 #
 # === Parameters
 #
@@ -8,21 +8,21 @@
 #   This is a boolean to flag a new install of a DTR.
 #   If set to true, Puppet will attempt to set up a new DTR
 #   Defaults to false
-# 
+#
 # [*join*]
 #   This resource is set to true when adding a replica to your DTR.
 #   NOTE join and install can not be used at the same time.
 #   Defaults to false
 #
-# [*dtr_version*] 
+# [*dtr_version*]
 #   The version of DTR you want installed. This resource must be set.
 #   If you are unsure of the version you can set latest to test.
-#   Defaults to undef 
+#   Defaults to undef
 #
 # [*dtr_external_url*]
 #   The external URL that is used to access your Docker Trusted Registry
 #   Required if dtr => true
-# 
+#
 # [*ucp_node*]
 #   The UCP node which the Docker trusted Registry will run on.
 #   Required if dtr => true
@@ -30,7 +30,7 @@
 # [*ucp_username*]
 #   The admin user name for the UCP cluster
 #   Required if dtr => true
-# 
+#
 # [*ucp_password*]
 #   The admin password for the UCP cluster
 #   Required if dtr => true
@@ -47,32 +47,29 @@
 # [*replica_id*]
 #  The replica ID for the DTR cluster
 #  Defaults to undef
-#  
+#
 # [*ucp_ca*]
 #  The ca to pass as part of the intall/join flags
-#  Defaults to undef 
+#  Defaults to undef
 #
 
 define docker_ddc::dtr (
 
-  $ensure = present,
-  $install = false,
-  $join = false,
-  $dtr_version = undef,
-  $dtr_external_url = undef,
-  $ucp_node = undef,
-  $ucp_username = undef,
-  $ucp_password = undef,
-  $ucp_insecure_tls = false,
-  $dtr_ucp_url = undef,
-  $dtr_existing_replica_id = undef,
-  $replica_id = undef,
-  $ucp_ca = undef,
+  Optional[Pattern[/^present$|^absent$/]] $ensure = present,
+  Boolean $install                                = false,
+  Boolean $join                                   = false,
+  Optional[String] $dtr_version                   = undef,
+  Optional[String] $dtr_external_url              = undef,
+  Optional[String] $ucp_node                      = undef,
+  Optional[String] $ucp_username                  = undef,
+  Optional[String] $ucp_password                  = undef,
+  Boolean $ucp_insecure_tls                       = false,
+  Optional[String] $dtr_ucp_url                   = undef,
+  Optional[String] $dtr_existing_replica_id       = undef,
+  Optional[String] $replica_id                    = undef,
+  Optional[String] $ucp_ca                        = undef,
   ) {
 
-  validate_re($ensure, '^(present|absent)$')
-  validate_string($dtr_version, $dtr_external_url, $ucp_node, $ucp_username, $ucp_password, $dtr_existing_replica_id)
-  validate_bool($install, $ucp_insecure_tls)
 
   if $install {
 

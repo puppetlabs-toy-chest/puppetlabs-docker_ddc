@@ -11,6 +11,12 @@ RSpec::Core::RakeTask.new(:acceptance => [:spec_prep]) do |t|
   t.pattern = 'spec/acceptance'
 end
 
+mandatory_envs = [
+  'docker_ee_source_location',
+  'docker_ee_key_source',
+  'docker_ee_key_id'
+]
+
 namespace :acceptance do
   {
     :vagrant => [

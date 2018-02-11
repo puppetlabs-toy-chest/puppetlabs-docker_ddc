@@ -40,7 +40,11 @@ RSpec.configure do |c|
       # net-tools required for netstat utility being used by some tests
       if fact_on(host, 'osfamily') == 'RedHat' && fact_on(host, 'operatingsystemmajrelease') == '7'
         on(host, 'yum install -y net-tools device-mapper')
+        on(host, 'yum install -y curl jq')
       end
+      if fact('osfamily') == 'Debian'
+        on(host, "apt-get update && sudo apt-get install curl jq --yes", acceptable_exit_codes: [0]).stdout
+      end      
     end
   end
 end

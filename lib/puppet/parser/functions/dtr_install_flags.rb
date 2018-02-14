@@ -14,6 +14,6 @@ module Puppet::Parser::Functions
     flags << "--ucp-url '#{opts['dtr_ucp_url']}'" if opts['dtr_ucp_url'].to_s != 'undef'
     flags << "--replica-id '#{opts['replica_id']}'" if opts['replica_id'].to_s != 'undef'
     flags << "--ucp-ca '#{opts['ucp_ca']}'" if opts['ucp_ca'].to_s != 'undef'
-    flags.flatten.join('')
+    flags.flatten.join(' ')
   end
 end

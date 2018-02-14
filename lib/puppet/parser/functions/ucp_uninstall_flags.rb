@@ -8,6 +8,6 @@ module Puppet::Parser::Functions
     opts['extra_parameters'].each do |param|
       flags << param
     end
-    flags.flatten.join('')
+    flags.flatten.join(' ')
   end
 end

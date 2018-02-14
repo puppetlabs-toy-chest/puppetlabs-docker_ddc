@@ -41,6 +41,6 @@ module Puppet::Parser::Functions
       flags << param
     end
 
-    flags.flatten.join('')
+    flags.flatten.join(' ')
   end
 end

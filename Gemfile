@@ -5,7 +5,13 @@ group :test do
   gem "json_pure", "<= 2.0.1" # 2.0.2 requires Ruby 2+
   gem 'metadata-json-lint'
   gem 'parallel_tests'
-  gem 'puppet', ENV['PUPPET_GEM_VERSION'] || '~> 4.3.0'
+  if puppet_gem_version = ENV['PUPPET_GEM_VERSION']
+    gem "puppet", puppet_gem_version
+  elsif puppet_git_url = ENV['PUPPET_GIT_URL']
+    gem "puppet", :git => puppet_git_url
+  else
+    gem "puppet"
+  end 
   gem "puppet-lint", "2.3.3"
   gem 'puppet-lint-absolute_classname-check'
   gem 'puppet-lint-classes_and_types_beginning_with_digits-check'

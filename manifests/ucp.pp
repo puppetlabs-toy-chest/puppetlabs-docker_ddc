@@ -173,7 +173,7 @@ class docker_ddc::ucp (
       extra_parameters          => any2array($extra_parameters),
     })
     exec { 'Uninstall Docker Universal Control Plane':
-      command => "docker run --rm -v ${docker_socket_path}:/var/run/docker.sock --name ucp docker/ucp uninstall ${uninstall_flags}", # lint:ignore:140chars
+      command => "docker run --rm -v ${docker_socket_path}:/var/run/docker.sock --name ucp docker/ucp uninstall-ucp ${uninstall_flags}", # lint:ignore:140chars
       onlyif  => $join_unless,
     }
   } else {

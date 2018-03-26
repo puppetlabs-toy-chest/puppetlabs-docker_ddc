@@ -9,7 +9,7 @@ describe 'docker_ddc::dtr', :type => :define do
 		:lsbdistid                 => 'Debian',
 		:lsbdistcodename           => 'jessie',
 		:kernelrelease             => '3.2.0-4-amd64',
-		:operatingsystemmajrelease => '8',
+		:operatingsystemmajrelease => '8'
 	} }
 
   context 'with ensure => present and dtr install' do
@@ -23,10 +23,11 @@ describe 'docker_ddc::dtr', :type => :define do
             'ucp_password' => 'foobar',
             'ucp_insecure_tls' => false,
             'dtr_ucp_url' => 'https://bar',
-            'replica_id' => 'foobar',    
+            'replica_id' => 'foobar'    
     } }
+
     it { is_expected.to compile.with_all_deps }
-    it { should contain_exec('Install dtr') }
+    it { is_expected.to contain_exec('Install dtr') }
   end
 
   context 'with ensure => present and dtr join' do
@@ -40,25 +41,44 @@ describe 'docker_ddc::dtr', :type => :define do
             'ucp_password' => 'foobar',
             'ucp_insecure_tls' => false,
             'dtr_ucp_url' => 'https://bar',
-            'replica_id' => 'foobar',
+            'replica_id' => 'foobar'
     } }
+
     it { is_expected.to compile.with_all_deps }
-    it { should contain_exec('Join dtr') }
+    it { is_expected.to contain_exec('Join dtr') }
   end
 
-  context 'with ensure => absent' do
+  context 'with ensure => absent and destroy => true' do
     let(:params) { # rubocop:disable Style/BlockDelimiters
 	    {
 	    'ensure' => 'absent',
 	    'dtr_external_url' => 'https://foo',
-            'ucp_node' => 'foo-bar',
             'ucp_username' => 'admin',
             'ucp_password' => 'foobar',
             'ucp_insecure_tls' => false,
             'dtr_ucp_url' => 'https://bar',
             'replica_id' => 'foobar',
+            'destroy' => true
     } }
+
     it { is_expected.to compile.with_all_deps }
-    it { should contain_exec('Uninstall dtr') }
+    it { is_expected.to contain_exec('Uninstall dtr').with_command(/\-\-rm docker\/dtr\: destroy/) }
+  end
+
+  context 'with ensure => absent and remove => true' do
+    let(:params) { # rubocop:disable Style/BlockDelimiters
+        {
+        'ensure' => 'absent',
+        'dtr_external_url' => 'https://foo',
+            'ucp_username' => 'admin',
+            'ucp_password' => 'foobar',
+            'ucp_insecure_tls' => false,
+            'dtr_ucp_url' => 'https://bar',
+            'replica_id' => 'foobar',
+            'remove' => true
+    } }
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_exec('Uninstall dtr').with_command(/\-\-rm docker\/dtr\: remove/) }
   end
 end

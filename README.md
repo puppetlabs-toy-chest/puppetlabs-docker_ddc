@@ -156,20 +156,32 @@ docker_ddc::dtr {'Dtr install':
 In this example we set mostly the same flags as installing the initial install. The main difference is that we have used the `join` flag not the `install` flag. Please note you can not use `install` and `join` in the same block of Puppet code.
 
 ## To remove your Docker Trusted Registry.
-To remove the DTR from your UCP cluster you need to pass some flags, the flags are the same as the install flags, except we are setting `ensure => 'absent'` 
+
+To remove the DTR from your UCP cluster see the example below. ensure => absent requires that the  destroy or remove parameter also be set in the manifest. Please note only one of these parameters should be set. 
+
 ```puppet
 docker_ddc::dtr {'Dtr install':
     ensure => 'absent',
+    replica_id => 'the_dtr_replica_id', 
     dtr_version => 'latest',
     dtr_external_url => 'https://172.17.10.104',
-    ucp_node => 'ucp-04',
     ucp_username => 'admin',
     ucp_password => 'orca4307',
     ucp_insecure_tls => true,
     dtr_ucp_url => 'https://172.17.10.101',
+    destroy => true, 
     }
 ```   
-  
+Passing the remove parameter gracefully scales down your DTR cluster by removing exactly one replica. All other replicas must be healthy and will remain healthy after this operation. This command can only be used when two or more replicas are present and all are healthy.
+
+```puppet
+remove => true
+
+Passing the destroy parameter forcefully removes all containers and volumes associated with a DTR replica without notifying the rest of the cluster.
+
+```puppet
+destroy => true
+
 ## Limitations
 
 This module only supports UCP version 1.9 and above.

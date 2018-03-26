@@ -52,12 +52,22 @@
 #  The ca to pass as part of the intall/join flags
 #  Defaults to undef
 #
+# [*remove*]
+# Gracefully scales down DTR cluster by removing exactly one replica. 
+# can only be used when 2 or more replicas present and all are healthy.
+# This or destroy parameter required with ensure => absent
+#
+# [*destroy*]
+# Forcefully removes all containers and volumes associated with a DTR replica.
+# This or remove parameter are required with ensure => absent
 
 define docker_ddc::dtr (
 
   Optional[Pattern[/^present$|^absent$/]] $ensure = present,
   Boolean $install                                = false,
   Boolean $join                                   = false,
+  Boolean $destroy                                = false,
+  Boolean $remove                                 = false,
   Optional[String] $dtr_version                   = undef,
   Optional[String] $dtr_external_url              = undef,
   Optional[String] $ucp_node                      = undef,
@@ -130,10 +140,9 @@ define docker_ddc::dtr (
 
   if $ensure == 'absent' {
 
-  $dtr_uninstall_flags = dtr_install_flags({
+  $dtr_uninstall_flags = dtr_uninstall_flags({
     dtr_version => $dtr_version,
     dtr_external_url => $dtr_external_url,
-    ucp_node => $ucp_node,
     ucp_username => $ucp_username,
     ucp_password => $ucp_password,
     ucp_insecure_tls => $ucp_insecure_tls,
@@ -144,13 +153,22 @@ define docker_ddc::dtr (
 
   $exec_onlyif = 'docker ps | grep dtr-api'
 
-  $docker_uninstall_command = "docker run -t --rm docker/dtr:${dtr_version} destroy ${dtr_uninstall_flags}"
+  if $destroy == $remove {
+    translate('You must set either $destroy or $remove to true to uninstall DTR')
+  }
 
-  exec { 'Uninstall dtr':
-    command     => $docker_uninstall_command,
-    environment => 'HOME=/root',
-    path        => ['/bin', '/usr/bin'],
-    onlyif      => $exec_onlyif,
+  if  $destroy {
+    $docker_uninstall_command = "docker run -t --rm docker/dtr:${dtr_version} destroy ${dtr_uninstall_flags}"
+  }
+
+  if $remove {
+    $docker_uninstall_command = "docker run -t --rm docker/dtr:${dtr_version} remove ${dtr_uninstall_flags}"
+  }
+    exec { 'Uninstall dtr':
+      command     => $docker_uninstall_command,
+      environment => 'HOME=/root',
+      path        => ['/bin', '/usr/bin'],
+      onlyif      => $exec_onlyif,
     }
   }
-}
+  }

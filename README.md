@@ -117,6 +117,18 @@ class { 'docker_ddc':
   listen_address => '192.168.1.2',
   advertise_address => '192.168.1.2',
   ucp_manager => '192.168.1.1',
+  ucp_url => 'https://ucp_url'
+}
+```
+
+# Uninstalling UCP
+
+To uninstall UCP you need to specify the node ucp is running on, please see the following example.
+
+```puppet
+class { 'docker_ddc':
+  ensure => absent,
+  ucp_id => 'ucp_node'
 }
 ```
 
@@ -133,7 +145,6 @@ docker_ddc::dtr {'Dtr install':
   ucp_password => 'orca4307',
   ucp_insecure_tls => true,
   dtr_ucp_url => 'https://172.17.10.101',
-  require => Class['docker_ucp'] 
   }
 ```
 In this example we are setting the `install => true` this tells Puppet we want to configure a new registry. We set the `dtr_version`, this can be any version of the registry that is compatible with your UCP cluster. The `dtr_external_url` is the URL you will use to hit the registry, `ucp_node` is the node in the cluster that the registry will run on, user name and password are self explanatory. `ucp_insecure_tls => true` allows the use of self signed SSL certs, this should be set to false in a production environment. `dtr_ucp_url` is the URL that the registry will use to contact the UCP cluster.
@@ -149,7 +160,6 @@ docker_ddc::dtr {'Dtr install':
   ucp_password => 'orca4307',
   ucp_insecure_tls => true,
   dtr_ucp_url => 'https://172.17.10.101',
-  require => [ Class['docker_ucp'] 
   }
 ```
 
@@ -160,7 +170,7 @@ In this example we set mostly the same flags as installing the initial install. 
 To remove the DTR from your UCP cluster see the example below. ensure => absent requires that the  destroy or remove parameter also be set in the manifest. Please note only one of these parameters should be set. 
 
 ```puppet
-docker_ddc::dtr {'Dtr install':
+docker_ddc::dtr {'Dtr uninstall':
     ensure => 'absent',
     replica_id => 'the_dtr_replica_id', 
     dtr_version => 'latest',
@@ -176,11 +186,13 @@ Passing the remove parameter gracefully scales down your DTR cluster by removing
 
 ```puppet
 remove => true
+```
 
 Passing the destroy parameter forcefully removes all containers and volumes associated with a DTR replica without notifying the rest of the cluster.
 
 ```puppet
 destroy => true
+```
 
 ## Limitations
 

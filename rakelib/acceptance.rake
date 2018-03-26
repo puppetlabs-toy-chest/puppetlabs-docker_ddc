@@ -28,13 +28,13 @@ namespace :acceptance do
     :vagrant => [
        'centos-70-x64',
        'ubuntu-1404-x64',
-       'ubuntu-1604-x64',
+       'ubuntu-1604-x64'
     ],
     :pooler => [
       'centos7',
       'rhel7',
       'ubuntu-1404',
-      'ubuntu-1604',
+      'ubuntu-1604'
     ]
   }.each do |ns, configs|
     namespace ns.to_sym do

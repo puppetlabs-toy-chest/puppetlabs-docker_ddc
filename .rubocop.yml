@@ -12,15 +12,21 @@ AllCops:
     - 'vendor/**/*'
     # Ignore code from test fixtures
     - 'spec/fixtures/**/*'
-
+    # Ignore code from docker_ddc_spec.rb as this is being removed when Cloud-1749 added
+    - 'spec/acceptance/*'
+    # Ignore code from the following files , these violations will be resolved in CLOUD-1791 
+    - 'spec/classes/docker_ddc_spec.rb'
+    - 'spec/defines/dtr_spec.rb'
+    - 'Gemfile'
+    - rakelib/*
+    - Rakefile
+    - lib/puppet/parser/functions/ucp_install_flags.rb
+    - lib/puppet/parser/functions/ucp_join_flags.rb 
 RSpec/BeforeAfterAll:
   Description: Beware of using after(:all) as it may cause state to leak between tests.
     A necessary evil in acceptance testing.
   Exclude:
   - spec/acceptance/**/*.rb
-
-Lint/ConditionPosition:
-  Enabled: true
 
 Lint/ElseLayout:
   Enabled: true
@@ -38,9 +44,6 @@ Lint/HandleExceptions:
   Enabled: true
   Exclude:
   - spec/spec_helper_acceptance.rb
-
-Lint/LiteralInCondition:
-  Enabled: true
 
 Lint/ShadowingOuterLocalVariable:
   Enabled: true
@@ -214,9 +217,6 @@ Layout/TrailingBlankLines:
   Enabled: false
 
 Layout/SpaceInsideBlockBraces:
-  Enabled: false
-
-Layout/SpaceInsideBrackets:
   Enabled: false
 
 Layout/SpaceInsideHashLiteralBraces:
@@ -497,7 +497,10 @@ Style/IfWithSemicolon:
 Style/Encoding:
   Enabled: false
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
   Enabled: false
 
 Layout/MultilineMethodCallIndentation:
@@ -511,7 +514,7 @@ Layout/MultilineBlockLayout:
   Enabled: false
 
 GetText/DecorateString:
-  Enabled: true
+  Enabled: false 
   Exclude:
   - lib/puppet/parser/functions/dtr_install_flags.rb
   - lib/puppet/parser/functions/dtr_join_flags.rb

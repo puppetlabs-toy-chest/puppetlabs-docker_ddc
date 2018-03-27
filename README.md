@@ -57,7 +57,7 @@ setup. Consult the UCP documentation for details of this options.
 class { 'docker_ddc':
   controller                => true,
   host_address              => ::ipaddress_eth1,
-  version                   => '1.0.0',
+  version                   => '2.2.7',
   usage                     => false,
   tracking                  => false,
   subject_alternative_names => ::ipaddress_eth1,
@@ -71,48 +71,18 @@ class { 'docker_ddc':
 }
 ```
 
-Note that `license_file` option will only work with versions of UCP
-later than 0.8.0.
-
 ### Joining a Node to UCP
-
-# Version =< 1
-You can use the same class on another node to join it to an existing
-UCP.
-
-```puppet
-class { 'docker_ddc':
-  ucp_url     => 'https://ucp-controller.example.com',
-  fingerprint => 'the-ucp-fingerprint-for-your-install',
-}
-```
 
 The default username and password are used, so it's likely that you'll
 need to provide those in parameters. The class also takes a number of
 other parameters useful for joininng. Again these should map to the
 options in the official UCP documetation.
 
-```puppet
-class { 'docker_ddc':
-  ucp_url                   => 'https://ucp-controller.example.com',
-  fingerprint               => 'the-ucp-fingerprint-for-your-install',
-  username                  => 'admin',
-  password                  => 'orca',
-  host_address              => ::ipaddress_eth1,
-  subject_alternative_names => ::ipaddress_eth1,
-  replica                   => true,
-  version                   => '0.8.0',
-  usage                     => false,
-  tracking                  => false,
-}
-```
-# Version 2 and above
-In UCP version 2 Docker has changed the underlying cluster scheduler from Swarm legacy to Swarm mode, because of that change the join flags have also changed.
-To join to a v2 manager (formally a controller in v1) please use the following:
+To join to a v2 manager please use the following:
 
 ```puppet
 class { 'docker_ddc':
-  version => '2.1.0',
+  version => '2.2.7',
   token => 'Your join token here',
   listen_address => '192.168.1.2',
   advertise_address => '192.168.1.2',
@@ -196,8 +166,8 @@ destroy => true
 
 ## Limitations
 
-This module only supports UCP version 1.9 and above.
-UCP only supports RHEL 7.0, 7.1, 7.2, Ubuntu 14.04, 16.04 and CentOS 7.1
+This module only supports UCP version 2.0 and above.
+UCP only supports RHEL 7.0, 7.1, 7.2, 7.4, Ubuntu 14.04, 16.04 and CentOS 7.1, 7.4
 
 
 ## Maintainers

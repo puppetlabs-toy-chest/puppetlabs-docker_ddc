@@ -196,7 +196,6 @@ describe 'docker_ddc' do
             'version',
             'ucp_url',
             'ucp_id',
-            'fingerprint',
             'username',
             'password',
           ].each do |param|
@@ -223,36 +222,6 @@ describe 'docker_ddc' do
             end
           end
         end
-
-        context 'joining UCP v1' do
-          context 'with the minimum properties v1' do
-      let(:fingerprint) { '12345' }
-            let(:ucp_url) { 'https://ucp' }
-      let(:params) do
-              {
-    'version' => '1',
-    'fingerprint' => fingerprint,
-                'ucp_url' => ucp_url,
-              }
-            end
-      it do
-        should contain_class('Docker_ddc').with_controller(false)
-              should contain_exec('Join Docker Universal Control Plane v1')
-    .with_logoutput(true)
-                .with_tries(3)
-                .with_try_sleep(5)
-                .with_command(/join/)
-                .with_command(/\-\-fingerprint '#{fingerprint}'/)
-                .with_command(/\-\-url '#{ucp_url}'/)
-                .with_unless('docker inspect ucp-proxy')
-              should_not contain_exec('Install Docker Universal Control Plane')
-                .with_command(/\-\-disable\-usage/)
-              should_not contain_exec('Install Docker Universal Control Plane')
-                .with_command(/\-\-disable\-tracking/)
-               end
-              end
-      end
-          end
 
      context 'joining UCP v2' do
        context 'with the minimum properties v2' do
@@ -299,17 +268,6 @@ describe 'docker_ddc' do
               contain_exec('Join Docker Universal Control Plane v2')
             end
           end
-
-   context 'without passing a UCP URL' do
-    let(:params) do
-              {
-                'fingerprint' => '12345',
-    'version'     => '2',
-              }
-            end
-            it do
-              contain_exec('Join Docker Universal Control Plane v2')
-            end
 
         context 'uninstalling UCP' do
           let(:ucp_id) { "1" }

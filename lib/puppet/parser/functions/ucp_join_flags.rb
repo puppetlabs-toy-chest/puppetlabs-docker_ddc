@@ -7,7 +7,6 @@ module Puppet::Parser::Functions
     flags << '--disable-usage' unless opts['usage']
     flags << '--replica' if opts['replica'] == true
     flags << "--image-version '#{opts['version']}'" if opts['version'] && opts['version'].to_s != 'undef'
-    flags << "--fingerprint '#{opts['fingerprint']}'" if opts['fingerprint'] && opts['fingerprint'].to_s != 'undef'
     flags << "--url '#{opts['ucp_url']}'" if opts['ucp_url'] && opts['ucp_url'].to_s != 'undef'
 
     multi_flags = lambda do |values, format|

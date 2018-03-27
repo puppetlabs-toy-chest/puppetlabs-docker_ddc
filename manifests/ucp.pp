@@ -63,10 +63,6 @@
 # [*ucp_id*]
 #   The ID for the UCP. Used when deleting UCP with ensure => absent.
 #
-# [*fingerprint*]
-#   The certificate fingerprint for the UCP controller.
-#   Required for nodes.
-#
 # [*token*]
 #  This is the authtentication token used for UCP 2.0 and above
 #  Required only if you are using UCP version 2.0 or higher
@@ -114,7 +110,6 @@ class docker_ddc::ucp (
   Optional[String] $ucp_url                                         = $docker_ddc::ucp_url,
   Optional[String] $ucp_manager                                     = $docker_ddc::ucp_manager,
   Optional[String] $ucp_id                                          = $docker_ddc::ucp_id,
-  Optional[String] $fingerprint                                     = $docker_ddc::fingerprint,
   Optional[String] $token                                           = $docker_ddc::token,
   Optional[String] $listen_address                                  = $docker_ddc::listen_address,
   Optional[String] $advertise_address                               = $docker_ddc::advertise_address,
@@ -144,11 +139,6 @@ class docker_ddc::ucp (
     if !$controller {
       if !$ucp_url {
         fail translate(('When joining UCP you must provide a URL.'))
-      }
-      if versioncmp($version, '1.1.3') <= 0 {
-        if !$fingerprint {
-          fail translate(('When joining UCP v1 you must provide a fingerprint.'))
-        }
       }
     }
   }
@@ -211,7 +201,6 @@ class docker_ddc::ucp (
         host_address       => $host_address,
         tracking           => $tracking,
         usage              => $usage,
-        fingerprint        => $fingerprint,
         ucp_url            => $ucp_url,
         replica            => $replica,
         dns_servers        => any2array($dns_servers),
@@ -229,11 +218,8 @@ class docker_ddc::ucp (
       }
 
       else {
-        exec { 'Join Docker Universal Control Plane v1':
-          command => "docker run --rm -v ${docker_socket_path}:/var/run/docker.sock -e 'UCP_ADMIN_USER=${username}' -e 'UCP_ADMIN_PASSWORD=${password}' --name ucp docker/ucp join ${join_flags}", # lint:ignore:140chars
-          unless  => $join_unless,
+          translate('UCP versions below 2.0 are no longer supported')
         }
       }
     }
   }
-}
